@@ -1,18 +1,18 @@
-// export { fetchCountries };
+const BASE_URL = 'https://restcountries.com/v3.1';
+const FILTER = 'name,capital,population,flags,languages';
 
-const BASE_URL = 'https://restcountries.com';
-const FILTER = 'name, capital, population, flags, languages';
-
-function fetchCountries(nameCountry) {
-    fetch(`${BASE_URL}/v3.1/name/${nameCountry}?fields=${FILTER}`).then(response => {
+export default function fetchCountries(name) {
+    return fetch(`${BASE_URL}/name/${name}?fields=${FILTER}`).then(response => {
         // if (response.status === 404) {
         //     return Promise.reject(
-        //         new Error('Oops, there is no country with that name')
+        //         new Error(`is not ok: ${response.status}`)
         //     );
         // }
         if (!response.ok) {
-            throw new Error('Oops, there is no country with that name');
+            throw new Error(`is not ok: ${response.status}`);
+        } else {
+             return response.json();
         }
-        return response.json();
+       
     });
 };

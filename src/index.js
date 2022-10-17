@@ -1,7 +1,7 @@
-import debounce from 'lodash.debounce';
-import { Notify } from 'notiflix';
 import './css/styles.css';
-import { fetchCountries } from './fetchCountries';
+import fetchCountries from './fetchCountries';
+import { Notify } from 'notiflix';
+import debounce from 'lodash.debounce';
 
 const DEBOUNCE_DELAY = 300;
 const MESSAGE = 'Too many matches found. Please enter a more specific name.';
@@ -12,10 +12,6 @@ const refs = {
     listEl: document.querySelector('.country-list'),
     infoEl: document.querySelector('.country-info'),
 } 
-// console.log(refs.searchFormEL);
-
-// const emptyMarkup = ref => (ref.innerHTML = '');
-
 refs.searchFormEL.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
 
 function emptyMarkup(ref) {
@@ -30,8 +26,8 @@ function onSearch(evt) {
         emptyMarkup(refs.listEl);
         emptyMarkup(refs.infoEl);
         return; 
-    } 
-        fetchCountries(textForm)
+    }
+    fetchCountries(textForm)
         .then(countries => {
             console.log(countries);
             if (countries.length > 10) {
@@ -45,7 +41,8 @@ function onSearch(evt) {
             emptyMarkup(refs.infoEl);
             Notify.failure(MESSAGE_ERROR);
         });
-    }
+    };
+        
 
 function renderMarkup(countries) {
     if (countries.length === 1) {
@@ -63,13 +60,13 @@ function listCountriesMarkup(countries) {
     .join(''); 
 };
 
-function infoCountriesMarkup({ name, capital, population, flags, languages }) {
-    return `<h1><img src="${flags.png}" alt="${
+function infoCountriesMarkup(countries) {
+    return countries.map(({ name, capital, population, flags, languages }) => `<h1><img src="${flags.png}" alt="${
         name.official
       }" width="50" height="50">${name.official}</h1>
       <p>Capital: <span>${capital}</span></p>
       <p>Population: <span> ${population}</span></p>
-      <p>Languages: <span> ${Object.values(languages)}</span></p>` 
+      <p>Languages: <span> ${Object.values(languages)}</span></p>` )
 }
 
 
